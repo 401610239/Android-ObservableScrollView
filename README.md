@@ -25,39 +25,52 @@ It's easy to interact with the Toolbar introduced in Android 5.0 Lollipop  and m
 
 ![](observablescrollview-samples/demo9.gif)
 
-## Installation
-
-```groovy
-dependencies {
-    compile 'com.github.ksoichiro:android-observablescrollview:1.2.1'
-}
-```
 
 ## Samples
 
-See `observablescrollview-samples` directory.
+### Google Play store
 
-To install:
+[![Get it on Google Play](https://developer.android.com/images/brand/en_generic_rgb_wo_45.png)](https://play.google.com/store/apps/details?id=com.github.ksoichiro.android.observablescrollview.samples2)
+
+### wercker
+
+If you are a wercker user, you can download the latest build artifact.
+[See here for details](https://github.com/ksoichiro/Android-ObservableScrollView/tree/master/docs/wercker.md).
+
+[![wercker status](https://app.wercker.com/status/8d1e27d9f4a662b25dbe70402733582b/m/master "wercker status")](https://app.wercker.com/project/bykey/8d1e27d9f4a662b25dbe70402733582b)
+
+### Install manually with Gradle
+
+Clone this repository and build the app using Gradle wrapper.
 
 ```sh
-$ ./gradlew installDebug
+$ git clone https://github.com/ksoichiro/Android-ObservableScrollView.git 
+$ cd Android-ObservableScrollView
+$ ./gradlew installDevDebug
 ```
 
-## Supported widgets
+## Usage
 
-| Widget | Since | Note |
-|:------:|:-----:| ---- |
-| ListView | v1.0.0 |    |
-| ScrollView | v1.0.0 |  |
-| WebView | v1.0.0 |     |
-| RecyclerView | v1.1.0 | It's supported but RecyclerView provides scroll states and position with [OnScrollListener](https://developer.android.com/reference/android/support/v7/widget/RecyclerView.OnScrollListener.html). You should use it if you don't have any reason. |
-| GridView | v1.2.0 | |
+### Add to your dependencies
 
-## How to use
+AAR is distributed on the Maven Central repository.
+
+```groovy
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile 'com.github.ksoichiro:android-observablescrollview:1.4.0'
+}
+```
+
+Eclipse is not supported but if you really want to build on Eclipse, [see here](https://github.com/ksoichiro/Android-ObservableScrollView/tree/master/docs/eclipse.md).
+
 
 ### Add widgets to your layout
 
-Use one of the `ObservableListView`, `ObservableScrollView`, `ObservableWebView`, `ObservableRecyclerView` in your XML layout file.
+Use one of the `ObservableListView`, `ObservableScrollView`, `ObservableWebView`, `ObservableRecyclerView`, `ObservableGridView` in your XML layout file.
 
 ### Control scroll events with callbacks
 
@@ -88,7 +101,72 @@ Example:
     }
 ```
 
-See sample project's `Activity` codes for more details.
+See [sample app's Activity codes](https://github.com/ksoichiro/Android-ObservableScrollView/tree/master/observablescrollview-samples/src/main/java/com/github/ksoichiro/android/observablescrollview/samples) for more details.
+
+
+## Supported widgets
+
+Widgets are named with `Observable` prefix.  
+(e.g. `ListView` → `ObservableListView`)  
+You can handle these widgets with `Scrollable` interface.
+
+| Widget | Since | Note |
+|:------:|:-----:| ---- |
+| ListView | v1.0.0 |    |
+| ScrollView | v1.0.0 |  |
+| WebView | v1.0.0 |     |
+| RecyclerView | v1.1.0 | It's supported but RecyclerView provides scroll states and position with [OnScrollListener](https://developer.android.com/reference/android/support/v7/widget/RecyclerView.OnScrollListener.html). You should use it if you don't have any reason. |
+| GridView | v1.2.0 | |
+
+
+## Environment
+
+This project is built and tested under the following environment.
+
+| OS             | IDE            |
+| -------------- | -------------- |
+| Mac OS X 10.10 | Android Studio 1.0 |
+
+## Release notes
+
+* v1.4.0
+    * Add a custom view named `TouchInterceptionFrameLayout` and a new API `setTouchInterceptionViewGroup()` for `Scrollable`.  
+      With these class and API, you can move `Scrollable` itself using its scrolling events.
+    * Add a helper class `ScrollUtils` for implementing scrolling effects.
+* v1.3.2
+    * Fix that `ObservableRecyclerView` causes `BadParcelableException` on `onRestoreInstanceState`.
+* v1.3.1
+    * Fix that `onDownMotionEvent` not called and parameters of `onScrollChanged` are incorrect
+      when children views handle touch events.
+* v1.3.0
+    * Add new interface `Scrollable` to provide common API for scrollable widgets. 
+* v1.2.1
+    * Fix that the scroll states and other internal information are lost after `onSaveInstanceState()`.
+    * Fix that the scrollY is incorrect if the ListView/RecyclerView don't scroll from the top.
+      (It's just approximating the scroll offset and not the complete solution but better than before.)
+* v1.2.0
+    * Add GridView support.
+    * Fix ObservableListView cannot detect onScrollChanged on Android 2.3.
+    * Fix ObservableScrollView cannot detect UP and DOWN state in onUpOrCancelMotionEvent before Android 4.4.
+* v1.1.0
+    * Add RecyclerView support.
+* v1.0.0
+    * Initial release.
+
+
+## Apps that uses this library
+
+* [Jair Player](https://play.google.com/store/apps/details?id=aj.jair.music) by Akshay Chordiya
+
+If you're using this library in your app and you'd like to list it here,  
+please let me know via [email](soichiro.kashima@gmail.com) or pull requests or issues.
+
+
+## Contributions
+
+Any contributions are welcome!  
+Please check the [contributing guideline](https://github.com/ksoichiro/Android-ObservableScrollView/tree/master/CONTRIBUTING.md) before submitting a new issue.
+
 
 ## Developed By
 

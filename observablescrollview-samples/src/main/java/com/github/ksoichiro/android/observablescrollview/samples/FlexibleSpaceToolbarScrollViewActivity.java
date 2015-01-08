@@ -16,22 +16,18 @@
 
 package com.github.ksoichiro.android.observablescrollview.samples;
 
-import android.content.res.TypedArray;
-import android.os.Build;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.TypedValue;
 import android.view.View;
-import android.view.ViewTreeObserver;
 import android.widget.TextView;
 
 import com.github.ksoichiro.android.observablescrollview.ObservableScrollView;
 import com.github.ksoichiro.android.observablescrollview.ObservableScrollViewCallbacks;
 import com.github.ksoichiro.android.observablescrollview.ScrollState;
+import com.github.ksoichiro.android.observablescrollview.ScrollUtils;
 import com.nineoldandroids.view.ViewHelper;
 
-public class FlexibleSpaceToolbarScrollViewActivity extends ActionBarActivity implements ObservableScrollViewCallbacks {
+public class FlexibleSpaceToolbarScrollViewActivity extends BaseActivity implements ObservableScrollViewCallbacks {
 
     private View mFlexibleSpaceView;
     private View mToolbarView;
@@ -61,15 +57,9 @@ public class FlexibleSpaceToolbarScrollViewActivity extends ActionBarActivity im
         findViewById(R.id.body).setPadding(0, flexibleSpaceAndToolbarHeight, 0, 0);
         mFlexibleSpaceView.getLayoutParams().height = flexibleSpaceAndToolbarHeight;
 
-        ViewTreeObserver vto = mTitleView.getViewTreeObserver();
-        vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+        ScrollUtils.addOnGlobalLayoutListener(mTitleView, new Runnable() {
             @Override
-            public void onGlobalLayout() {
-                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN) {
-                    mTitleView.getViewTreeObserver().removeGlobalOnLayoutListener(this);
-                } else {
-                    mTitleView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-                }
+            public void run() {
                 updateFlexibleSpaceText(scrollView.getCurrentScrollY());
             }
         });
@@ -107,15 +97,5 @@ public class FlexibleSpaceToolbarScrollViewActivity extends ActionBarActivity im
         int maxTitleTranslationY = mToolbarView.getHeight() + mFlexibleSpaceHeight - (int) (mTitleView.getHeight() * (1 + scale));
         int titleTranslationY = (int) (maxTitleTranslationY * ((float) mFlexibleSpaceHeight - adjustedScrollY) / mFlexibleSpaceHeight);
         ViewHelper.setTranslationY(mTitleView, titleTranslationY);
-    }
-
-    private int getActionBarSize() {
-        TypedValue typedValue = new TypedValue();
-        int[] textSizeAttr = new int[]{R.attr.actionBarSize};
-        int indexOfAttrTextSize = 0;
-        TypedArray a = obtainStyledAttributes(typedValue.data, textSizeAttr);
-        int actionBarSize = a.getDimensionPixelSize(indexOfAttrTextSize, -1);
-        a.recycle();
-        return actionBarSize;
     }
 }

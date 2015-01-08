@@ -18,24 +18,20 @@ package com.github.ksoichiro.android.observablescrollview.samples;
 
 import android.os.Bundle;
 import android.support.v4.view.ViewCompat;
-import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AbsListView;
-import android.widget.ArrayAdapter;
 
 import com.github.ksoichiro.android.observablescrollview.ObservableListView;
 import com.github.ksoichiro.android.observablescrollview.ObservableScrollViewCallbacks;
 import com.github.ksoichiro.android.observablescrollview.ScrollState;
+import com.github.ksoichiro.android.observablescrollview.ScrollUtils;
 import com.nineoldandroids.view.ViewHelper;
 import com.nineoldandroids.view.ViewPropertyAnimator;
 
-import java.util.ArrayList;
-import java.util.List;
-
-public class ToolbarControlListViewActivity extends ActionBarActivity implements ObservableScrollViewCallbacks {
+public class ToolbarControlListViewActivity extends BaseActivity implements ObservableScrollViewCallbacks {
 
     private static final String TAG = ToolbarControlListViewActivity.class.getSimpleName();
     private View mHeaderView;
@@ -58,13 +54,9 @@ public class ToolbarControlListViewActivity extends ActionBarActivity implements
         mListView.setScrollViewCallbacks(this);
 
         LayoutInflater inflater = LayoutInflater.from(this);
-        mListView.addHeaderView(inflater.inflate(R.layout.padding, null)); // toolbar
-        mListView.addHeaderView(inflater.inflate(R.layout.padding, null)); // sticky view
-        List<String> items = new ArrayList<String>();
-        for (int i = 1; i <= 100; i++) {
-            items.add("Item " + i);
-        }
-        mListView.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, items));
+        mListView.addHeaderView(inflater.inflate(R.layout.padding, mListView, false)); // toolbar
+        mListView.addHeaderView(inflater.inflate(R.layout.padding, mListView, false)); // sticky view
+        setDummyData(mListView);
 
         // ObservableListView uses setOnScrollListener, but it still works.
         mListView.setOnScrollListener(new AbsListView.OnScrollListener() {
@@ -90,7 +82,7 @@ public class ToolbarControlListViewActivity extends ActionBarActivity implements
                     mBaseTranslationY = scrollY;
                 }
             }
-            int headerTranslationY = Math.min(0, Math.max(-toolbarHeight, -(scrollY - mBaseTranslationY)));
+            float headerTranslationY = ScrollUtils.getFloat(-(scrollY - mBaseTranslationY), -toolbarHeight, 0);
             ViewPropertyAnimator.animate(mHeaderView).cancel();
             ViewHelper.setTranslationY(mHeaderView, headerTranslationY);
         }

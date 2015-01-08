@@ -18,16 +18,13 @@ package com.github.ksoichiro.android.observablescrollview.samples;
 
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.LinearLayoutManager;
 
 import com.github.ksoichiro.android.observablescrollview.ObservableRecyclerView;
 import com.github.ksoichiro.android.observablescrollview.ObservableScrollViewCallbacks;
 import com.github.ksoichiro.android.observablescrollview.ScrollState;
 
-import java.util.ArrayList;
-
-public class ActionBarControlRecyclerViewActivity extends ActionBarActivity implements ObservableScrollViewCallbacks {
+public class ActionBarControlRecyclerViewActivity extends BaseActivity implements ObservableScrollViewCallbacks {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,11 +35,7 @@ public class ActionBarControlRecyclerViewActivity extends ActionBarActivity impl
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setHasFixedSize(true);
         recyclerView.setScrollViewCallbacks(this);
-        ArrayList<String> items = new ArrayList<String>();
-        for (int i = 1; i <= 100; i++) {
-            items.add("Item " + i);
-        }
-        recyclerView.setAdapter(new SimpleRecyclerAdapter(this, items));
+        setDummyData(recyclerView);
     }
 
     @Override

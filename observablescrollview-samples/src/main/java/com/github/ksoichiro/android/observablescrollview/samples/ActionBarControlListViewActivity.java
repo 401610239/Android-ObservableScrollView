@@ -18,19 +18,14 @@ package com.github.ksoichiro.android.observablescrollview.samples;
 
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.widget.AbsListView;
-import android.widget.ArrayAdapter;
 
 import com.github.ksoichiro.android.observablescrollview.ObservableListView;
 import com.github.ksoichiro.android.observablescrollview.ObservableScrollViewCallbacks;
 import com.github.ksoichiro.android.observablescrollview.ScrollState;
 
-import java.util.ArrayList;
-import java.util.List;
-
-public class ActionBarControlListViewActivity extends ActionBarActivity implements ObservableScrollViewCallbacks {
+public class ActionBarControlListViewActivity extends BaseActivity implements ObservableScrollViewCallbacks {
 
     private static final String TAG = ActionBarControlListViewActivity.class.getSimpleName();
 
@@ -41,11 +36,7 @@ public class ActionBarControlListViewActivity extends ActionBarActivity implemen
 
         ObservableListView listView = (ObservableListView) findViewById(R.id.list);
         listView.setScrollViewCallbacks(this);
-        List<String> items = new ArrayList<String>();
-        for (int i = 1; i <= 100; i++) {
-            items.add("Item " + i);
-        }
-        listView.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, items));
+        setDummyData(listView);
 
         // ObservableListView uses setOnScrollListener, but it still works.
         listView.setOnScrollListener(new AbsListView.OnScrollListener() {

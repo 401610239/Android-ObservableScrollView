@@ -82,6 +82,36 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".FillGapListViewActivity"
+            android:label="@string/title_activity_fillgaplistview"
+            android:theme="@style/AppTheme.Toolbar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="${applicationId}" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".FillGapRecyclerViewActivity"
+            android:label="@string/title_activity_fillgaprecyclerview"
+            android:theme="@style/AppTheme.Toolbar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="${applicationId}" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".FillGapScrollViewActivity"
+            android:label="@string/title_activity_fillgapscrollview"
+            android:theme="@style/AppTheme.Toolbar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="${applicationId}" />
+            </intent-filter>
+        </activity>
+        <activity
             android:name=".FlexibleSpaceToolbarScrollViewActivity"
             android:label="@string/title_activity_flexiblespacetoolbarscrollview"
             android:theme="@style/AppTheme.Toolbar">
@@ -112,6 +142,76 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".FragmentActionBarControlListViewActivity"
+            android:label="@string/title_activity_fragmentactionbarcontrollistview"
+            android:theme="@style/AppTheme">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="${applicationId}" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".FragmentTransitionActivity"
+            android:label="@string/title_activity_fragmenttransition"
+            android:theme="@style/AppTheme.Toolbar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="${applicationId}" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".HandleTouchGridViewActivity"
+            android:label="@string/title_activity_handletouchgridview"
+            android:theme="@style/AppTheme.Toolbar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="${applicationId}" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".HandleTouchListViewActivity"
+            android:label="@string/title_activity_handletouchlistview"
+            android:theme="@style/AppTheme.Toolbar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="${applicationId}" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".HandleTouchRecyclerViewActivity"
+            android:label="@string/title_activity_handletouchrecyclerview"
+            android:theme="@style/AppTheme.Toolbar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="${applicationId}" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".HandleTouchScrollViewActivity"
+            android:label="@string/title_activity_handletouchscrollview"
+            android:theme="@style/AppTheme.Toolbar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="${applicationId}" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".HandleTouchWebViewActivity"
+            android:label="@string/title_activity_handletouchwebview"
+            android:theme="@style/AppTheme.Toolbar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="${applicationId}" />
+            </intent-filter>
+        </activity>
+        <activity
             android:name=".ParallaxToolbarScrollViewActivity"
             android:label="@string/title_activity_parallaxtoolbarscrollview"
             android:theme="@style/AppTheme.Toolbar">
@@ -134,6 +234,56 @@
         <activity
             android:name=".ScrollFromBottomRecyclerViewActivity"
             android:label="@string/title_activity_scrollfrombottomrecyclerview"
+            android:theme="@style/AppTheme.Toolbar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="${applicationId}" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".SlidingUpGridViewActivity"
+            android:label="@string/title_activity_slidingupgridview"
+            android:theme="@style/AppTheme.Toolbar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="${applicationId}" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".SlidingUpListViewActivity"
+            android:label="@string/title_activity_slidinguplistview"
+            android:theme="@style/AppTheme.Toolbar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="${applicationId}" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".SlidingUpRecyclerViewActivity"
+            android:label="@string/title_activity_slidinguprecyclerview"
+            android:theme="@style/AppTheme.Toolbar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="${applicationId}" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".SlidingUpScrollViewActivity"
+            android:label="@string/title_activity_slidingupscrollview"
+            android:theme="@style/AppTheme.Toolbar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="${applicationId}" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".SlidingUpWebViewActivity"
+            android:label="@string/title_activity_slidingupwebview"
             android:theme="@style/AppTheme.Toolbar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -182,8 +332,28 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".ViewPagerTab2Activity"
+            android:label="@string/title_activity_viewpagertab2"
+            android:theme="@style/AppTheme.Toolbar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="${applicationId}" />
+            </intent-filter>
+        </activity>
+        <activity
             android:name=".ViewPagerTabActivity"
             android:label="@string/title_activity_viewpagertab"
+            android:theme="@style/AppTheme.Toolbar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="${applicationId}" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".ViewPagerTabFragmentActivity"
+            android:label="@string/title_activity_viewpagertabfragment"
             android:theme="@style/AppTheme.Toolbar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

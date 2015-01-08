@@ -16,24 +16,20 @@
 
 package com.github.ksoichiro.android.observablescrollview.samples;
 
-import android.content.res.TypedArray;
 import android.graphics.Color;
-import android.os.Build;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.TypedValue;
 import android.view.View;
-import android.view.ViewTreeObserver;
 import android.widget.TextView;
 
 import com.github.ksoichiro.android.observablescrollview.ObservableScrollView;
 import com.github.ksoichiro.android.observablescrollview.ObservableScrollViewCallbacks;
 import com.github.ksoichiro.android.observablescrollview.ScrollState;
+import com.github.ksoichiro.android.observablescrollview.ScrollUtils;
 import com.nineoldandroids.view.ViewHelper;
 import com.nineoldandroids.view.ViewPropertyAnimator;
 
-public class FlexibleSpaceWithImageScrollViewActivity extends ActionBarActivity implements ObservableScrollViewCallbacks {
+public class FlexibleSpaceWithImageScrollViewActivity extends BaseActivity implements ObservableScrollViewCallbacks {
 
     private static final float MAX_TEXT_SCALE_DELTA = 0.3f;
     private static final boolean TOOLBAR_IS_STICKY = false;
@@ -79,16 +75,21 @@ public class FlexibleSpaceWithImageScrollViewActivity extends ActionBarActivity 
         ViewHelper.setScaleX(mFab, 0);
         ViewHelper.setScaleY(mFab, 0);
 
-        ViewTreeObserver vto = mScrollView.getViewTreeObserver();
-        vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+        ScrollUtils.addOnGlobalLayoutListener(mScrollView, new Runnable() {
             @Override
-            public void onGlobalLayout() {
-                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN) {
-                    mScrollView.getViewTreeObserver().removeGlobalOnLayoutListener(this);
-                } else {
-                    mScrollView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-                }
+            public void run() {
                 mScrollView.scrollTo(0, mFlexibleSpaceImageHeight - mActionBarSize);
+
+                // If you'd like to start from scrollY == 0, don't write like this:
+                //mScrollView.scrollTo(0, 0);
+                // The initial scrollY is 0, so it won't invoke onScrollChanged().
+                // To do this, use the following:
+                //onScrollChanged(0, false, false);
+
+                // You can also achieve it with the following codes.
+                // This causes scroll change from 1 to 0.
+                //mScrollView.scrollTo(0, 1);
+                //mScrollView.scrollTo(0, 0);
             }
         });
     }
@@ -98,14 +99,14 @@ public class FlexibleSpaceWithImageScrollViewActivity extends ActionBarActivity 
         // Translate overlay and image
         float flexibleRange = mFlexibleSpaceImageHeight - mActionBarSize;
         int minOverlayTransitionY = mActionBarSize - mOverlayView.getHeight();
-        ViewHelper.setTranslationY(mOverlayView, Math.max(minOverlayTransitionY, Math.min(0, -scrollY)));
-        ViewHelper.setTranslationY(mImageView, Math.max(minOverlayTransitionY, Math.min(0, -scrollY / 2)));
+        ViewHelper.setTranslationY(mOverlayView, ScrollUtils.getFloat(-scrollY, minOverlayTransitionY, 0));
+        ViewHelper.setTranslationY(mImageView, ScrollUtils.getFloat(-scrollY / 2, minOverlayTransitionY, 0));
 
         // Change alpha of overlay
-        ViewHelper.setAlpha(mOverlayView, Math.max(0, Math.min(1, (float) scrollY / flexibleRange)));
+        ViewHelper.setAlpha(mOverlayView, ScrollUtils.getFloat((float) scrollY / flexibleRange, 0, 1));
 
         // Scale title text
-        float scale = 1 + Math.max(0, Math.min(MAX_TEXT_SCALE_DELTA, (flexibleRange - scrollY) / flexibleRange));
+        float scale = 1 + ScrollUtils.getFloat((flexibleRange - scrollY) / flexibleRange, 0, MAX_TEXT_SCALE_DELTA);
         ViewHelper.setPivotX(mTitleView, 0);
         ViewHelper.setPivotY(mTitleView, 0);
         ViewHelper.setScaleX(mTitleView, scale);
@@ -121,8 +122,10 @@ public class FlexibleSpaceWithImageScrollViewActivity extends ActionBarActivity 
 
         // Translate FAB
         int maxFabTranslationY = mFlexibleSpaceImageHeight - mFab.getHeight() / 2;
-        int fabTranslationY = Math.max(mActionBarSize - mFab.getHeight() / 2,
-                Math.min(maxFabTranslationY, -scrollY + mFlexibleSpaceImageHeight - mFab.getHeight() / 2));
+        float fabTranslationY = ScrollUtils.getFloat(
+                -scrollY + mFlexibleSpaceImageHeight - mFab.getHeight() / 2,
+                mActionBarSize - mFab.getHeight() / 2,
+                maxFabTranslationY);
         ViewHelper.setTranslationX(mFab, mOverlayView.getWidth() - mFabMargin - mFab.getWidth());
         ViewHelper.setTranslationY(mFab, fabTranslationY);
 
@@ -136,9 +139,9 @@ public class FlexibleSpaceWithImageScrollViewActivity extends ActionBarActivity 
         if (TOOLBAR_IS_STICKY) {
             // Change alpha of toolbar background
             if (-scrollY + mFlexibleSpaceImageHeight <= mActionBarSize) {
-                setBackgroundAlpha(mToolbar, 1, mToolbarColor);
+                mToolbar.setBackgroundColor(ScrollUtils.getColorWithAlpha(1, mToolbarColor));
             } else {
-                setBackgroundAlpha(mToolbar, 0, mToolbarColor);
+                mToolbar.setBackgroundColor(ScrollUtils.getColorWithAlpha(0, mToolbarColor));
             }
         } else {
             // Translate Toolbar
@@ -158,16 +161,6 @@ public class FlexibleSpaceWithImageScrollViewActivity extends ActionBarActivity 
     public void onUpOrCancelMotionEvent(ScrollState scrollState) {
     }
 
-    private int getActionBarSize() {
-        TypedValue typedValue = new TypedValue();
-        int[] textSizeAttr = new int[]{R.attr.actionBarSize};
-        int indexOfAttrTextSize = 0;
-        TypedArray a = obtainStyledAttributes(typedValue.data, textSizeAttr);
-        int actionBarSize = a.getDimensionPixelSize(indexOfAttrTextSize, -1);
-        a.recycle();
-        return actionBarSize;
-    }
-
     private void showFab() {
         if (!mFabIsShown) {
             ViewPropertyAnimator.animate(mFab).cancel();
@@ -182,11 +175,5 @@ public class FlexibleSpaceWithImageScrollViewActivity extends ActionBarActivity 
             ViewPropertyAnimator.animate(mFab).scaleX(0).scaleY(0).setDuration(200).start();
             mFabIsShown = false;
         }
-    }
-
-    private void setBackgroundAlpha(View view, float alpha, int baseColor) {
-        int a = Math.min(255, Math.max(0, (int) (alpha * 255))) << 24;
-        int rgb = 0x00ffffff & baseColor;
-        view.setBackgroundColor(a + rgb);
     }
 }

@@ -247,8 +247,12 @@ public class ObservableRecyclerView extends RecyclerView implements Scrollable {
                                     parent.dispatchTouchEvent(event);
                                 }
                             });
+                            return false;
                         }
-                        return false;
+                        // Even when this can't be scrolled anymore,
+                        // simply returning false here may cause subView's click,
+                        // so delegate it to super.
+                        return super.onTouchEvent(ev);
                     }
                     break;
             }
@@ -345,7 +349,7 @@ public class ObservableRecyclerView extends RecyclerView implements Scrollable {
         /**
          * Called by onSaveInstanceState.
          */
-        private SavedState(Parcelable superState) {
+        SavedState(Parcelable superState) {
             this.superState = superState != EMPTY_STATE ? superState : null;
         }
 

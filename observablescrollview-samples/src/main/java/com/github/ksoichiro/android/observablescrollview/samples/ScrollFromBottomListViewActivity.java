@@ -48,7 +48,7 @@ public class ScrollFromBottomListViewActivity extends BaseActivity implements Ob
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_toolbarcontrollistview);
+        setContentView(R.layout.activity_stickyheaderlistview);
 
         setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
 
@@ -77,8 +77,8 @@ public class ScrollFromBottomListViewActivity extends BaseActivity implements Ob
 
     @Override
     public void onScrollChanged(int scrollY, boolean firstScroll, boolean dragging) {
-        if (dragging) {
-            int toolbarHeight = mToolbarView.getHeight();
+        int toolbarHeight = mToolbarView.getHeight();
+        if (dragging || scrollY < toolbarHeight) {
             if (firstScroll) {
                 float currentHeaderTranslationY = ViewHelper.getTranslationY(mHeaderView);
                 if (-toolbarHeight < currentHeaderTranslationY && toolbarHeight < scrollY) {

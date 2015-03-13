@@ -17,6 +17,7 @@
 package com.github.ksoichiro.android.observablescrollview;
 
 import android.content.Context;
+import android.os.Build;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.util.AttributeSet;
@@ -188,8 +189,12 @@ public class ObservableGridView extends GridView implements Scrollable {
                                     parent.dispatchTouchEvent(event);
                                 }
                             });
+                            return false;
                         }
-                        return false;
+                        // Even when this can't be scrolled anymore,
+                        // simply returning false here may cause subView's click,
+                        // so delegate it to super.
+                        return super.onTouchEvent(ev);
                     }
                     break;
             }
@@ -229,13 +234,30 @@ public class ObservableGridView extends GridView implements Scrollable {
         super.setOnScrollListener(mScrollListener);
     }
 
+    private int getNumColumnsCompat() {
+        if (Build.VERSION.SDK_INT >= 11) {
+            return getNumColumns();
+        } else {
+            int columns = 0;
+            if (getChildCount() > 0) {
+                int width = getChildAt(0).getMeasuredWidth();
+                if (width > 0) {
+                    columns = getWidth() / width;
+                }
+            }
+            return columns > 0 ? columns : AUTO_FIT;
+        }
+    }
+
     private void onScrollChanged() {
         if (mCallbacks != null) {
             if (getChildCount() > 0) {
                 int firstVisiblePosition = getFirstVisiblePosition();
                 for (int i = getFirstVisiblePosition(), j = 0; i <= getLastVisiblePosition(); i++, j++) {
                     if (mChildrenHeights.indexOfKey(i) < 0 || getChildAt(j).getHeight() != mChildrenHeights.get(i)) {
-                        mChildrenHeights.put(i, getChildAt(j).getHeight());
+                        if (i % getNumColumnsCompat() == 0) {
+                            mChildrenHeights.put(i, getChildAt(j).getHeight());
+                        }
                     }
                 }
 
@@ -303,7 +325,7 @@ public class ObservableGridView extends GridView implements Scrollable {
         /**
          * Called by onSaveInstanceState.
          */
-        private SavedState(Parcelable superState) {
+        SavedState(Parcelable superState) {
             super(superState);
         }
 

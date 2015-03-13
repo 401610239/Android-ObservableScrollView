@@ -2,7 +2,9 @@ Android-ObservableScrollView
 ===
 
 [![Build Status](http://img.shields.io/travis/ksoichiro/Android-ObservableScrollView.svg?style=flat)](https://travis-ci.org/ksoichiro/Android-ObservableScrollView)
+[![Coverage Status](https://img.shields.io/coveralls/ksoichiro/Android-ObservableScrollView/master.svg?style=flat)](https://coveralls.io/r/ksoichiro/Android-ObservableScrollView?branch=master)
 [![Maven Central](http://img.shields.io/maven-central/v/com.github.ksoichiro/android-observablescrollview.svg?style=flat)](https://github.com/ksoichiro/Android-ObservableScrollView/releases/latest)
+[![API](https://img.shields.io/badge/API-9%2B-brightgreen.svg?style=flat)](https://android-arsenal.com/api?level=9)
 [![Android Arsenal](https://img.shields.io/badge/Android%20Arsenal-Android--ObservableScrollView-brightgreen.svg?style=flat)](https://android-arsenal.com/details/1/1136)
 
 Android library to observe scroll events on scrollable views.  
@@ -61,12 +63,13 @@ repositories {
 }
 
 dependencies {
-    compile 'com.github.ksoichiro:android-observablescrollview:1.4.0'
+    compile 'com.github.ksoichiro:android-observablescrollview:1.5.0'
 }
 ```
 
-Eclipse is not supported but if you really want to build on Eclipse, [see here](https://github.com/ksoichiro/Android-ObservableScrollView/tree/master/docs/eclipse.md).
-
+Basically this project supports Android Studio.  
+If you'd like to use Eclipse, please [see here](https://github.com/ksoichiro/Android-ObservableScrollView/tree/master/docs/eclipse.md).
+It's partially supported.
 
 ### Add widgets to your layout
 
@@ -123,12 +126,15 @@ You can handle these widgets with `Scrollable` interface.
 
 This project is built and tested under the following environment.
 
-| OS             | IDE            |
-| -------------- | -------------- |
-| Mac OS X 10.10 | Android Studio 1.0 |
+| OS             | IDE                | JDK |
+| -------------- | ------------------ | --- |
+| Mac OS X 10.10 | Android Studio 1.0 | 1.7 |
 
 ## Release notes
 
+* v1.5.0
+    * Add a helper class `CacheFragmentStatePagerAdapter` to implement ViewPager pattern.
+    * Fix that swipe down (over-scroll) causes item click.
 * v1.4.0
     * Add a custom view named `TouchInterceptionFrameLayout` and a new API `setTouchInterceptionViewGroup()` for `Scrollable`.  
       With these class and API, you can move `Scrollable` itself using its scrolling events.
@@ -157,6 +163,7 @@ This project is built and tested under the following environment.
 ## Apps that uses this library
 
 * [Jair Player](https://play.google.com/store/apps/details?id=aj.jair.music) by Akshay Chordiya
+* [My Gradle](https://play.google.com/store/apps/details?id=se.project.generic.mygradle) by Erick Chavez Alcarraz
 
 If you're using this library in your app and you'd like to list it here,  
 please let me know via [email](soichiro.kashima@gmail.com) or pull requests or issues.

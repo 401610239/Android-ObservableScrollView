@@ -16,12 +16,17 @@
 
 package com.github.ksoichiro.android.observablescrollview.samples;
 
+import android.annotation.TargetApi;
+import android.content.res.Configuration;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.AbsListView;
+import android.widget.FrameLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.github.ksoichiro.android.observablescrollview.ObservableListView;
 import com.github.ksoichiro.android.observablescrollview.ObservableScrollViewCallbacks;
@@ -84,6 +89,12 @@ public class FlexibleSpaceWithImageListViewActivity extends BaseActivity impleme
         mTitleView.setText(getTitle());
         setTitle(null);
         mFab = findViewById(R.id.fab);
+        mFab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(FlexibleSpaceWithImageListViewActivity.this, "FAB is clicked", Toast.LENGTH_SHORT).show();
+            }
+        });
         mFabMargin = getResources().getDimensionPixelSize(R.dimen.margin_standard);
         ViewHelper.setScaleX(mFab, 0);
         ViewHelper.setScaleY(mFab, 0);
@@ -118,7 +129,7 @@ public class FlexibleSpaceWithImageListViewActivity extends BaseActivity impleme
 
         // Scale title text
         float scale = 1 + ScrollUtils.getFloat((flexibleRange - scrollY) / flexibleRange, 0, MAX_TEXT_SCALE_DELTA);
-        ViewHelper.setPivotX(mTitleView, 0);
+        setPivotXToTitle();
         ViewHelper.setPivotY(mTitleView, 0);
         ViewHelper.setScaleX(mTitleView, scale);
         ViewHelper.setScaleY(mTitleView, scale);
@@ -137,11 +148,20 @@ public class FlexibleSpaceWithImageListViewActivity extends BaseActivity impleme
                 -scrollY + mFlexibleSpaceImageHeight - mFab.getHeight() / 2,
                 mActionBarSize - mFab.getHeight() / 2,
                 maxFabTranslationY);
-        ViewHelper.setTranslationX(mFab, mOverlayView.getWidth() - mFabMargin - mFab.getWidth());
-        ViewHelper.setTranslationY(mFab, fabTranslationY);
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) {
+            // On pre-honeycomb, ViewHelper.setTranslationX/Y does not set margin,
+            // which causes FAB's OnClickListener not working.
+            FrameLayout.LayoutParams lp = (FrameLayout.LayoutParams) mFab.getLayoutParams();
+            lp.leftMargin = mOverlayView.getWidth() - mFabMargin - mFab.getWidth();
+            lp.topMargin = (int) fabTranslationY;
+            mFab.requestLayout();
+        } else {
+            ViewHelper.setTranslationX(mFab, mOverlayView.getWidth() - mFabMargin - mFab.getWidth());
+            ViewHelper.setTranslationY(mFab, fabTranslationY);
+        }
 
         // Show/hide FAB
-        if (ViewHelper.getTranslationY(mFab) < mFlexibleSpaceShowFabOffset) {
+        if (fabTranslationY < mFlexibleSpaceShowFabOffset) {
             hideFab();
         } else {
             showFab();
@@ -170,6 +190,17 @@ public class FlexibleSpaceWithImageListViewActivity extends BaseActivity impleme
 
     @Override
     public void onUpOrCancelMotionEvent(ScrollState scrollState) {
+    }
+
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
+    private void setPivotXToTitle() {
+        Configuration config = getResources().getConfiguration();
+        if (Build.VERSION_CODES.JELLY_BEAN_MR1 <= Build.VERSION.SDK_INT
+                && config.getLayoutDirection() == View.LAYOUT_DIRECTION_RTL) {
+            ViewHelper.setPivotX(mTitleView, findViewById(android.R.id.content).getWidth());
+        } else {
+            ViewHelper.setPivotX(mTitleView, 0);
+        }
     }
 
     private void showFab() {
